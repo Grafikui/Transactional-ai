@@ -1,0 +1,49 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Build artifacts
+build/
+dist/
+
+# Go binaries
+cmd/steamboat/steamboat
+dagger/dagger
+.dagger/test-*
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+node_modules/
+vendor/
+
+# IDEs
+.idea/
+.vscode/
+
+# Other
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+docs/.DS_Store
+.DS_Store
+/superpowers/
+
+# Development log (not tracked)
+DEVELOPMENT_LOG.md
+/superpowers-bootstrap
+/superpowers-codex
+
+# Dagger local configuration
+dagger.json
+/steamboat
