@@ -1,7 +1,8 @@
 
+"use client";
 import DashboardWidgets from "./components/DashboardWidgets";
 import RecentTransactionsTable from "./components/RecentTransactionsTable";
-import RecentLogsTable from "./components/RecentLogsTable";
+import { RecentLogsTable } from "./components/RecentLogsTable";
 
 export default function Home() {
   return (

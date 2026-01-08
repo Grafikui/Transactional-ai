@@ -1,3 +1,12 @@
+# 2026-01-08 Update
+
+## Recent Changes
+
+- Added robust Jest/Testing Library tests for RecentLogsTable and RecentTransactionsTable components.
+- Improved UI error handling and search/filter reliability.
+- All UI tests now pass, confirming coverage for search/filter and error handling.
+- See DEVELOPMENT_LOG.md for detailed changelog.
+
 # Transactional AI Control Plane & Governance Layer
 
 ## 1. Executive Summary
