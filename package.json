@@ -4,7 +4,7 @@
   "description": "A reliability protocol for AI Agents. Saga pattern with persistent rollback.",
   "main": "dist/index.js",
   "bin": {
-    "tai-inspect": "./dist/bin/inspect.js"
+    "tai-inspect": "dist/bin/inspect.js"
   },
   "types": "dist/index.d.ts",
   "files": [
@@ -12,6 +12,7 @@
   ],
   "scripts": {
     "build": "tsc",
+    "postbuild": "chmod +x dist/bin/inspect.js",
     "test": "jest",
     "prepublishOnly": "npm run build"
   },
@@ -35,7 +36,8 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "ts-jest": "^29.4.6",
-    "tsx": "^4.21.0"
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "@prisma/client": "6.15.0",

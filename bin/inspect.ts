@@ -6,7 +6,7 @@ async function main() {
   const [,, txId] = process.argv;
 
   if (!txId) {
-    console.error("Usage: npx ts-node bin/inspect.ts <transaction-id>");
+    console.error("Usage: npx transactional-ai inspect <transaction-id>");
     process.exit(1);
   }
 
