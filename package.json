@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "A reliability protocol for AI Agents. Saga pattern with persistent rollback.",
   "main": "dist/index.js",
+  "bin": {
+    "tai-inspect": "./dist/bin/inspect.js"
+  },
   "types": "dist/index.d.ts",
   "files": [
     "dist"
@@ -12,7 +15,14 @@
     "test": "jest",
     "prepublishOnly": "npm run build"
   },
-  "keywords": ["ai", "agent", "transaction", "saga", "reliability", "llm"],
+  "keywords": [
+    "ai",
+    "agent",
+    "transaction",
+    "saga",
+    "reliability",
+    "llm"
+  ],
   "author": "Your Name",
   "license": "MIT",
   "devDependencies": {
