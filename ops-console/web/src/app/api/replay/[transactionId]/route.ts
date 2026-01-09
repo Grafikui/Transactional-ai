@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { getAuditEvidence, logAuditEvidence } from '@/engine/auditEvidence';
-import { TransactionEngine } from '@/engine/stateMachine';
+// import removed: TransactionEngine no longer exists
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();

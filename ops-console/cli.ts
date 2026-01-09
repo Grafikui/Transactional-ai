@@ -1,5 +1,5 @@
 import { getEvents } from '../logging';
-import { Transaction } from '../engine/types';
+// import removed: Transaction type no longer exists
 
 export function showTransactionState(transaction: Transaction) {
   console.log('--- Transaction State ---');
