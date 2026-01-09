@@ -1,63 +1,41 @@
-# 2026-01-08 Update
+# Transactional AI (Core)
 
-## Recent Changes
+**A reliability protocol for AI Agents.**
 
-- Added robust Jest/Testing Library tests for RecentLogsTable and RecentTransactionsTable components.
-- Improved UI error handling and search/filter reliability.
-- All UI tests now pass, confirming coverage for search/filter and error handling.
-- See DEVELOPMENT_LOG.md for detailed changelog.
+This library prevents AI agents from leaving systems in broken or "zombie" states. It enforces a strict **Saga Pattern**, ensuring that multi-step agent actions either complete fully or roll back cleanly using defined compensating actions.
 
-# Transactional AI Control Plane & Governance Layer
+## The Problem
+LLMs are non-deterministic. When an agent creates a file, updates a database, and then fails to send an email, your system is left in an inconsistent state.
 
-## 1. Executive Summary
+## The Solution
+`transactional-ai` provides a lightweight state machine that forces you to define an `undo` operation for every `do` operation.
 
-The Transactional AI Control Plane & Governance Layer is a production-grade runtime for AI agents operating in high-risk, real-world systems. It ensures that all agent actions are deterministic, transactional, policy-governed, and fully auditable. The system prevents partial, irreversible, silent, or non-reproducible failures by enforcing strict transactional boundaries, compensating actions (Saga pattern), and hard policy enforcement. It is designed for SREs, platform engineers, compliance/security teams, and AI/ML platform owners who require robust, safe, and compliant AI automation.
+## Usage (The Litmus Test)
 
-**Differentiators:**
-- Deterministic, transactional execution (no partial or silent failures)
-- Policy-first: agents cannot bypass enforcement
-- Multi-provider LLM integration (OpenAI, Anthropic, Gemini)
-- Audit-grade evidence and replayability
-- Built-in compensating actions (Saga pattern)
-- Open-source core with enterprise/SaaS extensions
+```typescript
+import { Transaction } from '@transactional-ai/core';
 
-**Benefits:**
-- Prevents non-reproducible or unsafe agent actions
-- Enables compliance, audit, and incident response
-- Supports safe adoption of AI in regulated/high-risk environments
+const agent = new Transaction();
 
----
+await agent.run(async (tx) => {
+    // Step 1: Create Resource
+    const fileId = await tx.step('create-file', {
+        do: () => googleDrive.createFile('report.txt'),
+        undo: (result) => googleDrive.deleteFile(result.id) 
+    });
 
-## 2. Core Principles
+    // Step 2: External Action
+    await tx.step('email-report', {
+        do: () => emailService.send(fileId),
+        undo: () => emailService.recall(fileId) 
+    });
+});
+```
 
-- **Transactions > Scripts:** All agent actions are grouped into atomic, reversible transactions. Example: An agent updating IAM policies must be able to roll back all changes if any step fails.
-- **Policy > Autonomy:** Agents operate within strict, enforced policies. Example: An agent cannot escalate privileges or access forbidden resources, regardless of LLM output.
-- **Evidence > Logs:** Every action produces cryptographically signed evidence, not just logs. Example: Each step in a workflow is recorded with before/after state, policy checks, and signatures.
-
----
-
-## 3. Key Capabilities
-
-| Capability                  | Description                                                                 | Implementation Suggestions/Examples                  |
-|-----------------------------|-----------------------------------------------------------------------------|------------------------------------------------------|
-| Transactional Execution     | All workflows are atomic, with compensating actions for rollback (Saga)      | State machine, explicit rollback handlers            |
-| Policy-Governed Runtime     | Policy engine enforces rules before/after every action                       | OPA/Rego, custom DSL, or embedded policy engine      |
-| Determinism & Replayability | All executions are deterministic and replayable from evidence                | Event sourcing, state snapshots, replay CLI          |
-| Validation                  | Pre/post validation of all actions and state                                 | Schema validation, dry-run, invariants               |
-| Global Safety Controls      | Immediate halt/kill switch, incident triggers, credential isolation          | Ops Console, kill switch API, identity vault         |
-| Multi-Provider Resilience   | Integrate with multiple LLMs, failover, provider policy enforcement          | Adapter pattern, provider health checks              |
-
----
-
-## 4. Goals & Success Criteria
-
-- **Invariants:** No partial/irreversible/silent/non-reproducible failures
-- **Transactional Integrity:** All-or-nothing execution, compensating actions for rollback
-- **Audit-Grade Evidence:** Every action is signed, timestamped, and replayable
----
-## 5. Reference Implementation Agent
-
-  3. Propose changes (with dry-run)
+## Features
+- Atomic Steps: Every step is tracked.
+- Auto-Rollback: If Step 3 fails, Step 2 and Step 1 are automatically reversed.
+- Resumability: (Coming Soon) Persist state to Redis to resume crashed agents.
   4. Apply changes transactionally
   5. Rollback on failure
 - **Validation:** All changes must pass policy checks before commit
